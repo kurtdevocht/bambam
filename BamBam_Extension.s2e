@@ -1,0 +1,9 @@
+{
+	"extensionName": "Bam Bam",
+	"extensionPort": 15000,
+	"host": "localhost",
+	"blockSpecs": [
+		[
+			" ", "Bam %n!", "bam", 1],
+		]
+}
