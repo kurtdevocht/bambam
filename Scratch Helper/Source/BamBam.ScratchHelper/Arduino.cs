@@ -19,10 +19,14 @@ namespace BamBam.ScratchHelper
 
 		private ManualResetEvent m_responseReceived = new ManualResetEvent( false );
 		private string m_response;
+		private bool m_dtr;
+		private bool m_rts;
 
-		public Arduino( string comPort )
+		public Arduino( string comPort, bool dtr = false, bool rts = false )
 		{
 			m_comPort = comPort;
+			m_dtr = dtr;
+			m_rts = rts;
 		}
 
 		public string ComPort
@@ -30,6 +34,22 @@ namespace BamBam.ScratchHelper
 			get
 			{
 				return m_comPort;
+			}
+		}
+
+		public bool Dtr
+		{
+			get
+			{
+				return m_dtr;
+			}
+		}
+
+		public bool Rts
+		{
+			get
+			{
+				return m_rts;
 			}
 		}
 
@@ -48,9 +68,9 @@ namespace BamBam.ScratchHelper
 					// Step 1 - Try to open COM port
 					try
 					{
-						m_serialPort = new SerialPort( m_comPort, 115200 );
-						m_serialPort.DtrEnable = true;
-						m_serialPort.RtsEnable = true;
+						m_serialPort = new SerialPort( m_comPort, 9600 );
+						m_serialPort.DtrEnable = m_dtr;
+						m_serialPort.RtsEnable = m_rts;
 						m_serialPort.Open();
 					}
 					catch( Exception ex )
@@ -115,6 +135,7 @@ namespace BamBam.ScratchHelper
 			var buffer = new byte[ 256 ];
 			try
 			{
+				Thread.Sleep( 50 ); // <== Crappy code alert! Should implement a proper protocol...
 				int bytesRead = m_serialPort.Read( buffer, 0, buffer.Length );
 				m_response = Encoding.ASCII.GetString( buffer, 0, bytesRead );
 				m_responseReceived.Set();

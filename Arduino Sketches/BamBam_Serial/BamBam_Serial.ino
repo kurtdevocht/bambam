@@ -6,7 +6,7 @@ unsigned long times_to_turn_off[] = { 0, 0, 0, 0, 0 };
 
 void setup()
 {
-  Serial.begin( 115200 );
+  Serial.begin( 19200 );
   for( int i = 0; i < number_of_outputs; i++ )
   {
     pinMode( outputs[ i ], OUTPUT );

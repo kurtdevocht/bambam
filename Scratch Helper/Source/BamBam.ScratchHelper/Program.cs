@@ -40,9 +40,9 @@ namespace BamBam.ScratchHelper
 					Console.ReadLine();
 				}
 			}
-			catch( Exception ex )
+			catch ( Exception ex )
 			{
-				Console.WriteLine( "ERROR -- Cannot listen on " + baseAddress + " for Scratch requests: " + ex.Message);
+				Console.WriteLine( "ERROR -- Cannot listen on " + baseAddress + " for Scratch requests: " + ex.Message );
 				Console.WriteLine();
 				Console.WriteLine( "Press enter to stop..." );
 				Console.ReadLine();
@@ -52,13 +52,17 @@ namespace BamBam.ScratchHelper
 		private static bool FindArduino()
 		{
 			Console.WriteLine( "Looking for Arduino's on all COM ports..." );
-			var arduinos = SerialPort.GetPortNames().Select( p => new Arduino( p ) ).ToList();
+			var arduinos = SerialPort.GetPortNames().Select( p => new Arduino( p, false, false ) ).ToList(); // RTS & DTR Should be enabled for Leonardo
 			Task.WaitAll( arduinos.Select( a => a.OpenAsync() ).ToArray() );
 
 			Arduino arduino = null;
 			foreach ( var a in arduinos.OrderBy( a => a.ComPort ) )
 			{
-				Console.Write( "    " + a.ComPort + ": " );
+				Console.Write( "    "
+					+ a.ComPort + " "
+					+ ( a.Rts ? "RTS " : "" )
+					+ ( a.Dtr ? "DTR " : "" )
+					+ ": " );
 				if ( a.IsOpen )
 				{
 					if ( arduino == null )
