@@ -6,7 +6,7 @@ unsigned long times_to_turn_off[] = { 0, 0, 0, 0, 0 };
 
 void setup()
 {
-  Serial.begin( 19200 );
+  Serial.begin( 9600 );
   for( int i = 0; i < number_of_outputs; i++ )
   {
     pinMode( outputs[ i ], OUTPUT );
@@ -18,7 +18,7 @@ void loop()
   while( Serial.available() > 0 )
   {
     byte b = Serial.read();
-    
+    Serial.flush();
     // When a '?' character is sent, return a string that indicates the firmware
     if( b == '?' )
     {

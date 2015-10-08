@@ -27,14 +27,21 @@ namespace BamBam.ScratchHelper
 
 			Console.WriteLine();
 			Console.WriteLine();
-			string baseAddress = "http://localhost:15000/";
+            var port = 15000;
+
+            var options = new StartOptions()
+            {
+                Port = port,
+                ServerFactory = "Nowin"
+
+            };
 
 			try
 			{
 				// Start OWIN host 
-				using ( WebApp.Start<Startup>( url: baseAddress ) )
+				using ( WebApp.Start<Startup>( options ) )
 				{
-					Console.WriteLine( "Listening on " + baseAddress.ToString() + " for Scratch requests." );
+					Console.WriteLine( "Listening on port " + port.ToString() + " for Scratch requests." );
 					Console.WriteLine();
 					Console.WriteLine( "Press enter to stop..." );
 					Console.ReadLine();
@@ -42,7 +49,7 @@ namespace BamBam.ScratchHelper
 			}
 			catch ( Exception ex )
 			{
-				Console.WriteLine( "ERROR -- Cannot listen on " + baseAddress + " for Scratch requests: " + ex.Message );
+				Console.WriteLine( "ERROR -- Cannot listen on port " + port.ToString() + " for Scratch requests: " + ex.Message );
 				Console.WriteLine();
 				Console.WriteLine( "Press enter to stop..." );
 				Console.ReadLine();
